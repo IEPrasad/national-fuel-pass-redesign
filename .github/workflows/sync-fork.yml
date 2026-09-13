@@ -1,0 +1,23 @@
+name: Auto Sync Fork
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Sync main branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh repo sync IEPrasad/national-fuel-pass-redesign --branch main --source ZeenathHamza/national-fuel-pass-redesign || echo "No updates for main"
+      - name: Sync develop branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh repo sync IEPrasad/national-fuel-pass-redesign --branch develop --source ZeenathHamza/national-fuel-pass-redesign || echo "No updates for develop"
